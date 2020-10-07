@@ -71,8 +71,6 @@ def main(run_id=None, requested_version=None, workflow_fn="build-and-test.yml"):
     header = header.decode()
     installer_metadata = dict(re.findall(r"# ([A-Z]+): +(.+)", header))
     print("Found installer metadata", installer_metadata)
-    if int(installer_metadata["LINES"]) - 1 != len(header.split("\n")):
-        raise NotImplementedError(len(header.split("\n")))
     this_version, next_version = get_version(requested_version, installer_metadata)
     print(f"Releasing {this_version} next version will be {next_version}")
     # There should be once instance of the version string in the header and
