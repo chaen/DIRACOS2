@@ -8,30 +8,8 @@ on:
       - '**'
 
 jobs:
-  build-extra-packages:
-    name: Build packages
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Prepare environment
-        run: |
-          wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-          bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
-          eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          conda install --yes conda-build
-      - name: Create installer
-        run: |
-          eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          scripts/build_extra_packages.sh
-      - name: Upload extra packages channel
-        uses: actions/upload-artifact@v2
-        with:
-          name: extra-packages-channel
-          path: conda-bld/
-
   build-installer:
     name: Build installer
-    needs: build-extra-packages
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
