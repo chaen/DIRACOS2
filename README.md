@@ -17,7 +17,7 @@ Experimental repository using [conda constructor](https://github.com/conda/const
 
 ## Installing DIRACOS2
 
-These instructions will install the latest release of DIRACOS in a folder named `diracos`. To install a specific version replace `/latest/` in the URL with a version like `/2.0a2/`.
+These instructions will install the latest release of DIRACOS in a folder named `diracos`. To install a specific version replace `/latest/download/` in the URL with a version like `/download/2.0a4/`.
 
 ```bash
 curl -LO https://github.com/DIRACGrid/DIRACOS2/releases/latest/download/DIRACOS-Linux-x86_64.sh
