@@ -13,11 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Download installer
-        uses: actions/download-artifact@v2
-        with:
-          name: extra-packages-channel
-          path: conda-bld/
       - name: Prepare environment
         run: |
           wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
