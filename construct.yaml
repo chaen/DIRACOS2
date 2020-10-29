@@ -1,0 +1,73 @@
+name: DIRACOS
+version: 2.0a3
+
+
+channels:
+  - diracgrid
+  - conda-forge
+
+specs:
+  - conda
+  - python 3.8.*
+  - pip
+  # Security
+  - certifi
+  - m2crypto >=0.36
+  - pyasn1 >0.4.1
+  - pyasn1-modules
+  - tornado_m2crypto
+  # Databases
+  - cmreshandler >1.0.0b4
+  - elasticsearch-dsl
+  - mysql
+  - mysqlclient
+  - sqlalchemy >=1.0.9
+  - stomp.py =4.1.23
+  # Middleware
+  - boto3
+  - gfal2-util
+  - nordugrid-arc
+  - python-gfal2
+  - voms
+  # Others
+  - diraccfg
+  - future
+  - git
+  - gitpython >=2.1.0
+  - matplotlib-base
+  - myproxy
+  - numpy
+  - openssh
+  - pexpect >=4.0.1
+  - pillow
+  - psutil >=4.2.0
+  - pycurl
+  - python-json-logger >=0.1.8
+  - pytz >=2015.7
+  - requests >=2.9.1
+  - rrdtool
+  - singularity
+  - six
+  - subprocess32
+  - suds-jurko >=0.6
+  - tornado *+dirac*
+  - xmltodict
+  # Testing and development
+  - docutils
+  - hypothesis
+  - ipython
+  - mock
+  - pytest
+  - recommonmark
+  # Probably not needed
+  - lz4
+  - python-xxhash
+  - xrootd
+
+exclude:
+
+post_install: create_diracosrc.sh
+
+# If there are clobber issues with duplicate files this can be used to workaround them
+# When this happens the issue should be fixed upstream in conda-forge
+ignore_duplicate_files: true
