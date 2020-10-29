@@ -26,6 +26,8 @@ bash DIRACOS-Linux-x86_64.sh -b -p "$PWD/diracos/"
 
 It can then be activated in a similar way to version 1 of DIRACOS, by calling ` source "$PWD/diracos/diracosrc"`.
 
+**NOTE:** At this time there are no stable releases of DIRACOS2 and therefore the `/latest/` alias is non-functional. See the [GitHub releases page](https://github.com/DIRACGrid/DIRACOS2/releases) for the list of available pre-releases.
+
 ## Extensions
 
 TODO: See https://github.com/DIRACGrid/DIRACOS2/issues/1
