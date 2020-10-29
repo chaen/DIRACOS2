@@ -2,7 +2,20 @@
 
 Experimental repository using [conda constructor](https://github.com/conda/constructor) to build a Python 3 DIRACOS installer.
 
-## Installing DIRACOS
+## Table of contents
+
+* [Installing DIRACOS2](#installing-diracos2)
+* [Extensions](#extensions)
+* [Advanced documentation](#advanced-documentation)
+    * [Building the installer](#building-the-installer)
+    * [Testing the installer](#testing-the-installer)
+    * [Making a release](#making-a-release)
+    * [Building customised packages](#building-customised-packages)
+    * [Miscellaneous remarks](#miscellaneous-remarks)
+* [Troubleshooting](#troubleshooting)
+    * [Duplicate files](#duplicate-files)
+
+## Installing DIRACOS2
 
 These instructions will install the latest release of DIRACOS in a folder named `diracos`. To install a specific version replace `/latest/` in the URL with a version like `/2.0a2/`.
 
@@ -11,7 +24,15 @@ curl -LO https://github.com/DIRACGrid/DIRACOS2/releases/latest/download/DIRACOS-
 bash DIRACOS-Linux-x86_64.sh -b -p "$PWD/diracos/"
 ```
 
-## Building the installer
+It can then be activated in a similar way to version 1 of DIRACOS, by calling ` source "$PWD/diracos/diracosrc"`.
+
+## Extensions
+
+TODO: See https://github.com/DIRACGrid/DIRACOS2/issues/1
+
+## Advanced documentation
+
+### Building the installer
 
 The DIRACOS installer is a self-extracting shell script that is generated using [conda constructor](https://github.com/conda/constructor). This can be installed using any `conda` installation. If you don't have a local conda installation, you can use the following steps on Linux:
 
@@ -31,7 +52,7 @@ constructor . --platform=linux-64
 
 The packages included are defined in the `construct.yaml` file, see the [upstream documentation](https://github.com/conda/constructor/blob/master/CONSTRUCT.md) for more details.
 
-## Testing the installer
+### Testing the installer
 
 Basic tests of the installer can be ran using an arbitrary docker image by running:
 
@@ -39,15 +60,7 @@ Basic tests of the installer can be ran using an arbitrary docker image by runni
 scripts/run_basic_tests.sh DOCKER_IMAGE DIRACOS_INSTALLER_FILENAME
 ```
 
-## Extensions
-
-TODO
-
-## Building customised packages
-
-See [`management/conda-recipes`](https://github.com/DIRACGrid/management/tree/master/conda-recipes).
-
-## Making a release
+### Making a release
 
 To ensure reproducibility, releases are made from build artifacts from previous pipelines and are tagged using GitHub actions by triggering the [Create release](https://github.com/DIRACGrid/DIRACOS2/actions?query=workflow%3A%22Create+release%22) workflow. This workflow has the following optional parameters:
 
@@ -57,6 +70,18 @@ To ensure reproducibility, releases are made from build artifacts from previous 
 If the release process fails, a draft release might be left in GitHub. After the issue has been fixed this can be safely deleted before rerunning the CI.
 
 After the release is made a commit will be pushed to master to bump the DIRACOS release number in `construct.yaml` to the next alpha release. If the next alpha release is older than the current contents of `construct.yaml`, this step is skipped.
+
+### Building customised packages
+
+See [`management/conda-recipes`](https://github.com/DIRACGrid/management/tree/master/conda-recipes).
+
+### Miscellaneous remarks
+
+DIRACOS2 is a smaller wrapper around [conda constructor](https://github.com/conda/constructor) which generates a self-extracting installer that is suitable for DIRAC's needs based on packages which are distributed by [conda-forge](https://conda-forge.org/). As such, most components are documented by their respective projects. The following is a list of remarks that are specific DIRACOS2:
+
+* The build-and-test workflow is ran on every push event as well as once per day. GitHub Actions limitations will cause the nightly build to be disabled if there is no activity in the repository for 60 days. If this happens, it can be easily re-enabled by pushing an empty commit to master.
+* The DIRACOS installer follows the common pattern of being a shell script that exits followed by an arbitrary binary blob. In principle it is possible to create other kinds of installer with `constructor` however these are no deemed to be of interest at the current time.
+* Similarly to the original DIRACOS, releases are made by assigning a version number to a previous CI build. As `constructor` embeds the version number into the installer at build time, this means the version of the installed has to be edited for the binary artifact. Fortunately this is only embedded in the shell script at the start of the file, so it's a relatively simple string manipulation to modify it. This is done using in the `main()` function of [`scripts/make_release.py`](https://github.com/DIRACGrid/DIRACOS2/blob/main/scripts/make_release.py). As this is not an officially supported feature of constructor it is prone to changing at anytime.
 
 ## Troubleshooting
 
