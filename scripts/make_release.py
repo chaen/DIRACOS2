@@ -18,10 +18,10 @@ def main(run_id=None, requested_version=None, workflow_fn="build-and-test.yml"):
     """Make a new release of DIRACOS2 based on a GitHub Actions CI run
 
     Releases are made by:
-    1. Download the artefact from a GitHub Actions CI run
+    1. Download the artifact from a GitHub Actions CI run
     2. Editing it in place to change the version number
     3. Creating a pre-release in GitHub
-    4. Uploading release artefacts to the new pre-release
+    4. Uploading release artifacts to the new pre-release
     5. If the version number is not a pre-release: converting the pre-release to a full release
        causing the "latest" release to update
     6. Editing the current "main" branch to be one version higher than the current latest release
@@ -141,7 +141,7 @@ def get_version(version, installer_metadata):
 
 
 def get_installer_artifacts(run_id):
-    """Download the artefacts from a GitHub Actions run
+    """Download the artifacts from a GitHub Actions run
 
     Parameters
     ----------
@@ -185,8 +185,8 @@ def make_release(installer, environment_yaml, version, commit_hash):
     """Create a new GitHub release using the given data
 
     This function always makes a pre-release first to ensure the "latest" release never corresponds
-    to one without artefacts uploaded. If the new version number is not a pre-release, as
-    determined by PEP-440, it is promoted to at full release after he uploads have completed
+    to one without artifacts uploaded. If the new version number is not a pre-release, as
+    determined by PEP-440, it is promoted to at full release after the uploads have completed
     successfully.
 
     Parameters
