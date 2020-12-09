@@ -2,7 +2,6 @@
 import argparse
 import base64
 from io import BytesIO
-import os
 import re
 import zipfile
 
@@ -15,43 +14,27 @@ CONSTRUCT_VERSION_PATTERN = re.compile(r"version: *(\d+\.\d.+) *\n")
 END_HEADER_MAGIC = b"@@END_HEADER@@"
 
 
-def get_artifacts_zip(artifacts, artifact_name):
-    r = requests.get(
-        artifacts[artifact_name]["archive_download_url"],
-        headers={"Authorization": f"token {token}"},
-        stream=True
-    )
-    r.raise_for_status()
-    decoding_classes = {
-        "application/zip": zipfile.ZipFile
-    }
-    return decoding_classes[r.headers['Content-Type']](BytesIO(r.content))
-
-
-def get_version(version, installer_metadata):
-    if version is None:
-        # If no version is given, convert the build version number to a release version
-        version = Version(installer_metadata["VER"])
-        version = ".".join(map(str, version.release))
-    version = Version(version)
-
-    if version.is_prerelease:
-        # Bump the pre-release digit
-        next_version = [
-            ".".join(map(str, version.release)),
-            "".join(map(str, version.pre[:-1] + (version.pre[-1] + 1,))),
-        ]
-    else:
-        # Bump the least significant digit
-        next_version = [
-            ".".join(map(str, version.release[:-1] + (version.release[-1] + 1,))),
-            "a1"
-        ]
-
-    return str(version), "".join(next_version)
-
-
 def main(run_id=None, requested_version=None, workflow_fn="build-and-test.yml"):
+    """Make a new release of DIRACOS2 based on a GitHub Actions CI run
+
+    Releases are made by:
+
+    1. Download the artifact from a GitHub Actions CI run
+    2. Editing it in place to change the version number
+    3. Creating a pre-release in GitHub
+    4. Uploading release artifacts to the new pre-release
+    5. If the version number is not a pre-release: converting the pre-release to a full release
+       causing the "latest" release to update
+    6. Editing the current "main" branch to be one version higher than the current latest release
+
+    Authentication is performed using the GitHub API token which is automatically made available
+    to all GitHub Actions jobs.
+
+    :param str run_id: The GitHub Actions run ID or, if missing, defaults to the most recent
+    :param str requested_version: A version to embed in the DIRACOS2 installer, overriding
+        the pre-existing value from when it was built
+    :param str workflow_fn: The name of the GitHub Actions workflow configuration file
+    """
     if run_id is None:
         # Find the run pipeline for the main branch
         r = requests.get(
@@ -87,7 +70,68 @@ def main(run_id=None, requested_version=None, workflow_fn="build-and-test.yml"):
     bump_version_in_main(next_version)
 
 
+def get_artifacts_zip(artifacts, artifact_name):
+    """Download an artifact from a GitHub actions CI run
+
+    :param dict artifacts: Mapping of artifacts names to data from
+        https://developer.github.com/v3/actions/artifacts/#list-workflow-run-artifacts
+    :param str artifact_name: The key in the dictionary to download
+    :returns: An in-memory zipfile.ZipFile object
+    """
+    r = requests.get(
+        artifacts[artifact_name]["archive_download_url"],
+        headers={"Authorization": f"token {token}"},
+        stream=True
+    )
+    r.raise_for_status()
+    decoding_classes = {
+        "application/zip": zipfile.ZipFile
+    }
+    return decoding_classes[r.headers['Content-Type']](BytesIO(r.content))
+
+
+def get_version(version, installer_metadata):
+    """Extract the version from the metadata written by conda-constructor
+
+    This function is fragile and based on the implementation of conda-constructor in
+    https://github.com/conda/constructor/blob/master/constructor/header.sh
+
+    :param str version: Override the version data contained in the DIRACOS2 installer with this version number
+    :param dict installer_metadata: The metadata extracted from the header of the DIRACOS2 installer
+    :returns: A tuple of ``str`` containing (current_version, next_version)
+    """
+    if version is None:
+        # If no version is given, convert the build version number to a release version
+        version = Version(installer_metadata["VER"])
+        version = ".".join(map(str, version.release))
+    version = Version(version)
+
+    if version.is_prerelease:
+        # Bump the pre-release digit
+        next_version = [
+            ".".join(map(str, version.release)),
+            "".join(map(str, version.pre[:-1] + (version.pre[-1] + 1,))),
+        ]
+    else:
+        # Bump the least significant digit
+        next_version = [
+            ".".join(map(str, version.release[:-1] + (version.release[-1] + 1,))),
+            "a1"
+        ]
+
+    return str(version), "".join(next_version)
+
+
 def get_installer_artifacts(run_id):
+    """Download the artifacts from a GitHub Actions run
+
+    :param int run_id: The GitHub Actions run ID to download artifacts from
+    :raises RuntimeError: The GitHub Actions run was not successful
+    :returns: A tuple of the:
+        * Git revision used for the given Run ID
+        * The `str` corresponding to the ``environment.yaml`` generated by the DIRACOS2 installer
+        * The `bytes` corresponding to the DIRACOS2 installer itself
+    """
     r = requests.get(f"{api_root}/actions/runs/{run_id}", headers=headers)
     r.raise_for_status()
     run_info = r.json()
@@ -111,6 +155,19 @@ def get_installer_artifacts(run_id):
 
 
 def make_release(installer, environment_yaml, version, commit_hash):
+    """Create a new GitHub release using the given data
+
+    This function always makes a pre-release first to ensure the "latest" release never corresponds
+    to one without artifacts uploaded. If the new version number is not a pre-release, as
+    determined by PEP-440, it is promoted to at full release after the uploads have completed
+    successfully.
+
+    :param bytes installer: The `bytes` corresponding to the DIRACOS2 installer itself
+    :param str environment_yaml: The `str` corresponding to the ``environment.yaml``
+        generated by the DIRACOS2 installer
+    :param str version: The version of the new release
+    :param str commit_hash: DIRACOS2 git revision used for the release
+    """
     release_notes = "\n".join([
         f"# DIRACOS {version}",
         "",
@@ -197,6 +254,10 @@ def make_release(installer, environment_yaml, version, commit_hash):
 
 
 def bump_version_in_main(new_version):
+    """Edit the construct.yaml file on main to correspond to the next DIRACOS2 version
+
+    :param str new_version: The next version number of DIRACOS2
+    """
     r = requests.get(f"{api_root}/contents/construct.yaml", headers=headers)
     r.raise_for_status()
     file_info = r.json()
