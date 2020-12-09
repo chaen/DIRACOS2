@@ -64,7 +64,7 @@ scripts/run_basic_tests.sh DOCKER_IMAGE DIRACOS_INSTALLER_FILENAME
 
 ### Making a release
 
-To ensure reproducibility, releases are made from build artifacts from previous pipelines and are tagged using GitHub actions by triggering the [Create release](https://github.com/DIRACGrid/DIRACOS2/actions?query=workflow%3A%22Create+release%22) workflow. This workflow has the following optional parameters:
+To ensure reproducibility, releases are made from build artifacts from previous pipelines and are tagged using GitHub actions by triggering the [Create release](https://github.com/DIRACGrid/DIRACOS2/actions?query=workflow%3A%22Create+release%22) workflow. This workflow runs [`scripts/make_release.py`](https://github.com/DIRACGrid/DIRACOS2/blob/main/scripts/make_release.py) and has the following optional parameters:
 
 * **Run ID**: The GitHub Actions workflow run ID. If not given, defaults to the most recent build of the `main` branch.
 * **Version number**: A [PEP-440](https://www.python.org/dev/peps/pep-0440/) compliant version number. If not given, defaults to the contents the contents of version field in the `construct.yaml` rounded to the next full release (i.e. `2.4a5` becomes `2.4` and `2.1` remains unchanged). If a pre-release is explicitly give, it will be marked as a pre-release in GitHub and won't affect the `latest` alias.
