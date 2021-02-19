@@ -298,6 +298,7 @@ def make_release(installer, environment_yaml, version, commit_hash, release_note
     r = requests.post(
         f"{api_root}/releases",
         json={
+            "name": version,
             "tag_name": version,
             "target_commitish": commit_hash,
             "body": release_notes,
