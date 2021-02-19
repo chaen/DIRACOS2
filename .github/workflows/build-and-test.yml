@@ -19,6 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Keep constructor cache between invocations
+        # This is big help to avoid needing to transmuting packages every time
+        id: cache-primes
+        uses: actions/cache@v2
+        with:
+          path: ~/.conda/constructor
+          key: ${{ runner.os }}-constructor
       - name: Prepare environment
         run: |
           wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
