@@ -268,6 +268,7 @@ def make_release(installer, environment_yaml, version, commit_hash, release_note
             "## Package list",
             "<details>",
             "  <summary>Click to expand!</summary>",
+            "",
             "```yaml",
             environment_yaml,
             "```",
@@ -276,6 +277,7 @@ def make_release(installer, environment_yaml, version, commit_hash, release_note
             f"## Changes with respect to {previous_version} ignoring build strings",
             "<details>",
             "  <summary>Click to expand!</summary>",
+            "",
             "```diff",
             diff_without_builds,
             "```",
@@ -284,6 +286,7 @@ def make_release(installer, environment_yaml, version, commit_hash, release_note
             f"## Full changes with respect to {previous_version}",
             "<details>",
             "  <summary>Click to expand!</summary>",
+            "",
             "```diff",
             diff_full,
             "```",
@@ -295,6 +298,7 @@ def make_release(installer, environment_yaml, version, commit_hash, release_note
     r = requests.post(
         f"{api_root}/releases",
         json={
+            "name": version,
             "tag_name": version,
             "target_commitish": commit_hash,
             "body": release_notes,
