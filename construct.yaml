@@ -19,6 +19,8 @@ default_prefix: "${PWD}/diracos"
 # When this happens the issue should be fixed upstream in conda-forge
 ignore_duplicate_files: true
 
+transmute_file_type: .conda
+
 exclude:
 
 specs:
