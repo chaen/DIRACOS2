@@ -1,27 +1,29 @@
+# For details about the available options see
+# https://github.com/conda/constructor/blob/master/CONSTRUCT.md
 name: DIRACOS
 version: 2.0a6
 
 channels:
   - diracgrid
   - conda-forge
-
 conda_default_channels:
   - diracgrid
   - conda-forge
 
 post_install: create_diracosrc.sh
-
 keep_pkgs: false
-
 default_prefix: "${PWD}/diracos"
+
+# Converting packages to be .conda files makes the installer considerably
+# smaller and faster but is computationally expensive.
+# Can be disabled for local development.
+transmute_file_type: .conda
+
+exclude:
 
 # If there are clobber issues with duplicate files this can be used to workaround them
 # When this happens the issue should be fixed upstream in conda-forge
 ignore_duplicate_files: true
-
-transmute_file_type: .conda
-
-exclude:
 
 specs:
   - conda
