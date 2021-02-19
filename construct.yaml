@@ -1,10 +1,25 @@
 name: DIRACOS
 version: 2.0a6
 
-
 channels:
   - diracgrid
   - conda-forge
+
+conda_default_channels:
+  - diracgrid
+  - conda-forge
+
+post_install: create_diracosrc.sh
+
+keep_pkgs: false
+
+default_prefix: "${PWD}/diracos"
+
+# If there are clobber issues with duplicate files this can be used to workaround them
+# When this happens the issue should be fixed upstream in conda-forge
+ignore_duplicate_files: true
+
+exclude:
 
 specs:
   - conda
@@ -64,11 +79,3 @@ specs:
   - lz4
   - python-xxhash
   - xrootd
-
-exclude:
-
-post_install: create_diracosrc.sh
-
-# If there are clobber issues with duplicate files this can be used to workaround them
-# When this happens the issue should be fixed upstream in conda-forge
-ignore_duplicate_files: true
