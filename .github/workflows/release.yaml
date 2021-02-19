@@ -28,6 +28,7 @@ jobs:
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
           wget https://raw.githubusercontent.com/chrisburr/DIRAC/releases-notes-token-arg/docs/diracdoctools/scripts/dirac-docs-get-release-notes.py
           python dirac-docs-get-release-notes.py \
+            --sinceLatestTag \
             -r DIRACGrid/DIRACOS2 \
             --branches main \
             --token="${{ secrets.GITHUB_TOKEN }}" | tail -n +2 | sed '/^$/d' > release_notes.txt
