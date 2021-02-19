@@ -22,17 +22,18 @@ jobs:
           wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
           bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          conda install --yes "python>=3.8" packaging requests uritemplate
-      - name: Create release
+          conda install --yes "python>=3.8" packaging requests uritemplate dateutil pytz
+      - name: Create release notes
         run: |
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-
           wget https://raw.githubusercontent.com/chrisburr/DIRAC/releases-notes-token-arg/docs/diracdoctools/scripts/dirac-docs-get-release-notes.py
           python dirac-docs-get-release-notes.py \
             -r DIRACGrid/DIRACOS2 \
             --branches main \
             --token="${{ secrets.GITHUB_TOKEN }}" | tail -n +2 | sed '/^$/d' > release_notes.txt
-
+      - name: Create release
+        run: |
+          eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
           scripts/make_release.py \
             --token="${{ secrets.GITHUB_TOKEN }}" \
             --run-id="${{ github.event.inputs.run_id }}" \
