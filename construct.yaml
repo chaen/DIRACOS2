@@ -38,7 +38,7 @@ specs:
   # Databases
   - cmreshandler >1.0.0b4
   - elasticsearch-dsl
-  - mysql
+  - mysql-client
   - mysqlclient
   - sqlalchemy >=1.0.9
   - stomp.py =4.1.23
