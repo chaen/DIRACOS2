@@ -22,7 +22,7 @@ jobs:
           wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
           bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          conda install --yes "python>=3.8" packaging requests uritemplate dateutil pytz
+          conda install --yes "python>=3.8" packaging requests uritemplate python-dateutil pytz
       - name: Create release notes
         run: |
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
