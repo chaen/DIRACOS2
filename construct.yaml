@@ -13,6 +13,7 @@ conda_default_channels:
 post_install: create_diracosrc.sh
 keep_pkgs: false
 default_prefix: "${PWD}/diracos"
+batch_mode: true
 
 # Converting packages to be .conda files makes the installer considerably
 # smaller and faster but is computationally expensive.

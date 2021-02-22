@@ -21,7 +21,7 @@ These instructions will install the latest release of DIRACOS in a folder named 
 
 ```bash
 curl -LO https://github.com/DIRACGrid/DIRACOS2/releases/latest/download/DIRACOS-Linux-x86_64.sh
-bash DIRACOS-Linux-x86_64.sh -b -p "$PWD/diracos/"
+bash DIRACOS-Linux-x86_64.sh
 ```
 
 It can then be activated in a similar way to version 1 of DIRACOS, by calling ` source "$PWD/diracos/diracosrc"`.
