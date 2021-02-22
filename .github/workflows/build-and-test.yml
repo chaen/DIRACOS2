@@ -32,6 +32,8 @@ jobs:
           bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
           conda install --yes constructor
+          # See https://github.com/conda/constructor/pull/440
+          pip install git+https://github.com/chrisburr/constructor.git@add-batch_mode
       - name: Create installer
         run: |
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
