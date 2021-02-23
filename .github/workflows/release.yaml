@@ -26,7 +26,7 @@ jobs:
       - name: Create release notes
         run: |
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          wget https://raw.githubusercontent.com/chrisburr/DIRAC/releases-notes-token-arg/docs/diracdoctools/scripts/dirac-docs-get-release-notes.py
+          wget https://raw.githubusercontent.com/DIRACGrid/DIRAC/integration/docs/diracdoctools/scripts/dirac-docs-get-release-notes.py
           python dirac-docs-get-release-notes.py \
             --sinceLatestTag \
             -r DIRACGrid/DIRACOS2 \
