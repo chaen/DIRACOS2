@@ -1,0 +1,19 @@
+name: diracos2-build-env
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python >=3.8
+  - pip
+  # Constructor itself
+  - constructor
+  # For creating release notes and releases
+  - packaging
+  - requests
+  - uritemplate
+  - python-dateutil
+  - pytz
+  - pip:
+    # See https://github.com/conda/constructor/pull/440
+    - git+https://github.com/chrisburr/constructor.git@add-batch_mode
