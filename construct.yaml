@@ -49,6 +49,7 @@ specs:
   - gfal2-util
   - nordugrid-arc
   - python-gfal2
+  - python-irodsclient
   - voms
   # Others
   - diraccfg
@@ -73,6 +74,7 @@ specs:
   - suds-jurko >=0.6
   - tornado *+dirac*
   - xmltodict
+  - importlib_resources
   # Testing and development
   - docutils
   - hypothesis
