@@ -447,7 +447,7 @@ def bump_version_in_main(new_version):
         "sha": file_info["sha"],
         "branch": "main",
     }
-    logging.debug("Updating version to %s with %r", new_version, data)
+    logging.info("Updating version to %s with %r", new_version, data)
     r = requests.put(
         file_info["url"],
         json=data,
