@@ -1,6 +1,6 @@
 # DIRACOS2
 
-Experimental repository using [conda constructor](https://github.com/conda/constructor) to build a Python 3 DIRACOS installer.
+Python 3 DIRACOS installer built using [conda constructor](https://github.com/conda/constructor) and [conda-forge](https://conda-forge.org/).
 
 ## Table of contents
 
@@ -27,10 +27,6 @@ bash DIRACOS-Linux-x86_64.sh
 It can then be activated in a similar way to version 1 of DIRACOS, by calling ` source "$PWD/diracos/diracosrc"`.
 
 **NOTE:** At this time there are no stable releases of DIRACOS2 and therefore the `/latest/` alias is non-functional. See the [GitHub releases page](https://github.com/DIRACGrid/DIRACOS2/releases) for the list of available pre-releases.
-
-## Extensions
-
-TODO: See https://github.com/DIRACGrid/DIRACOS2/issues/1
 
 ## Advanced documentation
 
