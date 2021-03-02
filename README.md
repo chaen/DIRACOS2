@@ -5,7 +5,6 @@ Python 3 DIRACOS installer built using [conda constructor](https://github.com/co
 ## Table of contents
 
 * [Installing DIRACOS2](#installing-diracos2)
-* [Extensions](#extensions)
 * [Advanced documentation](#advanced-documentation)
     * [Building the installer](#building-the-installer)
     * [Testing the installer](#testing-the-installer)
