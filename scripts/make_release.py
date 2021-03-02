@@ -8,6 +8,7 @@ import logging
 import re
 import subprocess
 import tempfile
+import time
 import zipfile
 
 from packaging.version import Version, InvalidVersion
@@ -423,6 +424,9 @@ def bump_version_in_main(new_version):
 
     :param str new_version: The next version number of DIRACOS2
     """
+    log.info("Sleeping to allow GitHub to update")
+    time.sleep(15)
+
     r = requests.get(f"{api_root}/contents/construct.yaml", headers=headers)
     r.raise_for_status()
     file_info = r.json()
@@ -447,7 +451,6 @@ def bump_version_in_main(new_version):
         "sha": file_info["sha"],
         "branch": "main",
     }
-    logging.info("Updating version to %s with %r", new_version, data)
     r = requests.put(
         file_info["url"],
         json=data,
