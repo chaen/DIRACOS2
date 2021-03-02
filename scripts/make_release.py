@@ -91,7 +91,7 @@ def main(
         print(release_notes)
     else:
         # Create the GitHub release
-        make_release(installer, environment_yaml, this_version, commit_hash, release_notes, dry_run)
+        make_release(installer, environment_yaml, this_version, commit_hash, release_notes)
         # Update the construct.yaml on main
         bump_version_in_main(next_version)
 
