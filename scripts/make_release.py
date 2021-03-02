@@ -91,10 +91,19 @@ def main(
     if dry_run:
         print(release_notes)
     else:
+        # Update the construct.yaml on main
+        for i in range(10):
+            try:
+                bump_version_in_main(next_version)
+            except requests.exceptions.HTTPError:
+                logging.exception("Failed to call bump_version_in_main")
+                time.sleep(30)
+            else:
+                break
+        else:
+            raise Exception("Ran out of retries calling bump_version_in_main")
         # Create the GitHub release
         make_release(installer, environment_yaml, this_version, commit_hash, release_notes)
-        # Update the construct.yaml on main
-        bump_version_in_main(next_version)
 
 
 def get_artifacts_zip(artifacts, artifact_name):
@@ -424,9 +433,6 @@ def bump_version_in_main(new_version):
 
     :param str new_version: The next version number of DIRACOS2
     """
-    logging.info("Sleeping to allow GitHub to update")
-    time.sleep(180)
-
     r = requests.get(f"{api_root}/contents/construct.yaml", headers=headers)
     r.raise_for_status()
     file_info = r.json()
