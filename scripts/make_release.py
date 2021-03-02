@@ -425,7 +425,7 @@ def bump_version_in_main(new_version):
     :param str new_version: The next version number of DIRACOS2
     """
     logging.info("Sleeping to allow GitHub to update")
-    time.sleep(15)
+    time.sleep(180)
 
     r = requests.get(f"{api_root}/contents/construct.yaml", headers=headers)
     r.raise_for_status()
