@@ -441,13 +441,16 @@ def bump_version_in_main(new_version):
     if num_subs != 1:
         raise RuntimeError(num_subs)
 
+    data = {
+        "message": f"Bump version to {new_version}",
+        "content": base64.b64encode(new_data.encode()).decode(),
+        "sha": file_info["sha"],
+        "branch": "main",
+    }
+    log.debug("Updating version to %s with %r", new_version, data)
     r = requests.put(
         file_info["url"],
-        json={
-            "message": f"Bump version to {new_version}",
-            "content": base64.b64encode(new_data.encode()).decode(),
-            "sha": file_info["sha"],
-        },
+        json=data,
         headers=headers,
     )
     r.raise_for_status()
