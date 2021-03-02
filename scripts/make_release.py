@@ -8,7 +8,6 @@ import logging
 import re
 import subprocess
 import tempfile
-import time
 import zipfile
 
 from packaging.version import Version, InvalidVersion
@@ -91,19 +90,10 @@ def main(
     if dry_run:
         print(release_notes)
     else:
-        # Update the construct.yaml on main
-        for i in range(10):
-            try:
-                bump_version_in_main(next_version)
-            except requests.exceptions.HTTPError:
-                logging.exception("Failed to call bump_version_in_main")
-                time.sleep(30)
-            else:
-                break
-        else:
-            raise Exception("Ran out of retries calling bump_version_in_main")
         # Create the GitHub release
         make_release(installer, environment_yaml, this_version, commit_hash, release_notes)
+        # Update the construct.yaml on main
+        bump_version_in_main(next_version)
 
 
 def get_artifacts_zip(artifacts, artifact_name):
