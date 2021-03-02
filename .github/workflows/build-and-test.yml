@@ -17,6 +17,9 @@ jobs:
     name: Build installer
     if: github.repository == 'DIRACGrid/DIRACOS2'
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
       - id: get-date
@@ -30,13 +33,11 @@ jobs:
           path: ~/.conda/constructor
           key: ${{ runner.os }}-constructor-${{ steps.get-date.outputs.year-and-week }}
       - name: Prepare environment
-        run: |
-          wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
-          bash Miniforge3-Linux-x86_64.sh -b -p $HOME/miniforge
-          eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          conda install --yes constructor
-          # See https://github.com/conda/constructor/pull/440
-          pip install git+https://github.com/chrisburr/constructor.git@add-batch_mode
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: scripts/environment.yml
+          miniforge-variant: Mambaforge
+          use-mamba: true
       - name: Create installer
         run: |
           eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
@@ -59,7 +60,7 @@ jobs:
           name: installer
       - name: Generate environment.yaml
         run: |
-          bash DIRACOS-*.sh -b -p diracos
+          bash DIRACOS-*.sh
           source diracos/diracosrc
           conda env export --file environment.yaml
       - name: Upload environment.yaml
@@ -68,6 +69,40 @@ jobs:
           name: environment-yaml
           path: |
             environment.yaml
+
+  release-notes:
+    name: Show release notes and diff
+    if: github.repository == 'DIRACGrid/DIRACOS2'
+    needs: get-info
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Prepare environment
+        uses: conda-incubator/setup-miniconda@master
+        with:
+          environment-file: scripts/environment.yml
+          miniforge-variant: Mambaforge
+          use-mamba: true
+      - name: Create release notes
+        run: |
+          scripts/make_release.py \
+            --token="${{ secrets.GITHUB_TOKEN }}" \
+            --artifacts-dir="${PWD}/artifacts" \
+            > release-notes.md
+          cat release-notes.md
+      - name: Upload release-notes.md
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-notes
+          path: |
+            release-notes.md
 
   basic-tests:
     name: Basic tests
