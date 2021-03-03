@@ -35,7 +35,7 @@ specs:
   - m2crypto >=0.36
   - pyasn1 >0.4.1
   - pyasn1-modules
-  - tornado_m2crypto
+  - tornado_m2crypto  # [linux64]
   # Databases
   - cmreshandler >1.0.0b4
   - elasticsearch-dsl
@@ -47,7 +47,7 @@ specs:
   - apache-libcloud
   - boto3
   - gfal2-util
-  - nordugrid-arc
+  - nordugrid-arc  # [linux64]
   - python-gfal2
   - python-irodsclient
   - voms
@@ -68,11 +68,11 @@ specs:
   - pytz >=2015.7
   - requests >=2.9.1
   - rrdtool
-  - singularity
+  - singularity  # [linux64]
   - six
   - subprocess32
   - suds-jurko >=0.6
-  - tornado *+dirac*
+  - tornado *+dirac*  # [linux64]
   - xmltodict
   - importlib_resources
   # Testing and development
