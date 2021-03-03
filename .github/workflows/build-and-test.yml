@@ -20,6 +20,9 @@ jobs:
     defaults:
       run:
         shell: bash -l {0}
+    strategy:
+      matrix:
+        target_arch: ["linux-64", "linux-aarch64", "linux-ppc64le"]
     steps:
       - uses: actions/checkout@v2
       - id: get-date
@@ -40,8 +43,9 @@ jobs:
           use-mamba: true
       - name: Create installer
         run: |
-          eval "$(${HOME}/miniforge/bin/conda shell.bash hook)"
-          constructor . --platform=linux-64
+          CONDA_SUBDIR=${{ matrix.target_arch }} mamba create --name constructor-${{ matrix.target_arch }} conda-standalone
+          CONDA_STANDALONE_PATH="$(conda info --envs | grep constructor-${{ matrix.target_arch }} | sed -E 's@([^ ]+ +)@@g')/standalone_conda/conda.exe"
+          constructor . --platform="${{ matrix.target_arch }}" --conda-exe="${CONDA_STANDALONE_PATH}"
       - name: Upload installer
         uses: actions/upload-artifact@v2
         with:
