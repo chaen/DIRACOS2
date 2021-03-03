@@ -382,7 +382,7 @@ def make_release(installers, version, release_notes):
     release_data = r.json()
     logging.info(f"Created draft release at: {release_data['html_url']}")
 
-    for platform, intaller in installers.items():
+    for platform, installer in installers.items():
         alt_platform = PLATFORM_MAPPING[platform]
 
         # Upload the installer
@@ -391,7 +391,7 @@ def make_release(installers, version, release_notes):
                 release_data["upload_url"],
                 name=f"DIRACOS-{version}-{alt_platform}.sh",
             ),
-            data=intaller["installer"],
+            data=installer["installer"],
             headers={**headers, "Content-Type": "application/x-sh"},
         )
         r.raise_for_status()
@@ -402,7 +402,7 @@ def make_release(installers, version, release_notes):
                 release_data["upload_url"],
                 name=f"DIRACOS-{alt_platform}.sh",
             ),
-            data=intaller["installer"],
+            data=installer["installer"],
             headers={**headers, "Content-Type": "application/x-sh"},
         )
         r.raise_for_status()
@@ -412,6 +412,7 @@ def make_release(installers, version, release_notes):
                 "Skipping upload of environment.yaml, "
                 "currently only supported for linux-64"
             )
+            continue
 
         # Upload the environment.yaml
         r = requests.post(
@@ -419,7 +420,7 @@ def make_release(installers, version, release_notes):
                 release_data["upload_url"],
                 name=f"DIRACOS-{version}-{alt_platform}-environment.yaml",
             ),
-            data=intaller["environment_yaml"],
+            data=installer["environment_yaml"],
             headers={**headers, "Content-Type": "application/x-yaml"},
         )
         r.raise_for_status()
@@ -430,7 +431,7 @@ def make_release(installers, version, release_notes):
                 release_data["upload_url"],
                 name=f"DIRACOS-{alt_platform}-environment.yaml",
             ),
-            data=intaller["environment_yaml"],
+            data=installer["environment_yaml"],
             headers={**headers, "Content-Type": "application/x-yaml"},
         )
         r.raise_for_status()
