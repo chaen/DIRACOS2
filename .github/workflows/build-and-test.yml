@@ -34,7 +34,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.conda/constructor
-          key: ${{ runner.os }}-constructor-${{ steps.get-date.outputs.year-and-week }}
+          key: ${{ runner.os }}-${{ matrix.target_arch }}-constructor-${{ steps.get-date.outputs.year-and-week }}
       - name: Prepare environment
         uses: conda-incubator/setup-miniconda@master
         with:
@@ -49,7 +49,7 @@ jobs:
       - name: Upload installer
         uses: actions/upload-artifact@v2
         with:
-          name: installer
+          name: installer-${{ matrix.target_arch }}
           path: DIRACOS-*.sh
 
   get-info:
@@ -57,11 +57,14 @@ jobs:
     if: github.repository == 'DIRACGrid/DIRACOS2'
     needs: build-installer
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target_arch: ["linux-64"]
     steps:
       - name: Download installer
         uses: actions/download-artifact@v2
         with:
-          name: installer
+          name: installer-${{ matrix.target_arch }}
       - name: Generate environment.yaml
         run: |
           bash DIRACOS-*.sh
@@ -70,7 +73,7 @@ jobs:
       - name: Upload environment.yaml
         uses: actions/upload-artifact@v2
         with:
-          name: environment-yaml
+          name: environment-yaml-${{ matrix.target_arch }}
           path: |
             environment.yaml
 
@@ -125,6 +128,6 @@ jobs:
       - name: Download installer
         uses: actions/download-artifact@v2
         with:
-          name: installer
+          name: installer-linux-64
       - name: Run tests
         run: scripts/run_basic_tests.sh ${{ matrix.docker-image }} DIRACOS-*.sh
