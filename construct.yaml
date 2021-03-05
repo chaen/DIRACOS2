@@ -49,7 +49,6 @@ specs:
   - gfal2-util
   - nordugrid-arc  # [linux64]
   - python-gfal2
-  - python-irodsclient
   - voms
   # Others
   - diraccfg
