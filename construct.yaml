@@ -35,7 +35,7 @@ specs:
   - m2crypto >=0.36
   - pyasn1 >0.4.1
   - pyasn1-modules
-  - tornado_m2crypto  # [linux64]
+  - tornado_m2crypto
   # Databases
   - cmreshandler >1.0.0b4
   - elasticsearch-dsl
@@ -71,7 +71,7 @@ specs:
   - six
   - subprocess32
   - suds-jurko >=0.6
-  - tornado *+dirac*  # [linux64]
+  - tornado *+dirac*
   - xmltodict
   - importlib_resources
   # Testing and development
