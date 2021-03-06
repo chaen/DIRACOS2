@@ -47,7 +47,7 @@ specs:
   - apache-libcloud
   - boto3
   - gfal2-util
-  - nordugrid-arc  # [linux64]
+  - nordugrid-arc
   - python-gfal2
   - voms
   # Others
