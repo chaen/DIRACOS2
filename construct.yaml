@@ -40,7 +40,8 @@ specs:
   - cmreshandler >1.0.0b4
   - elasticsearch-dsl
   - mysql-client
-  - mysqlclient
+  # Earlier versions of mysqlclient were build with older MySQL versions
+  - mysqlclient >=2.0.3
   - sqlalchemy >=1.0.9
   - stomp.py =4.1.23
   # Middleware
