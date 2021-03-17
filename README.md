@@ -16,7 +16,7 @@ Python 3 DIRACOS installer built using [conda constructor](https://github.com/co
 
 ## Installing DIRACOS2
 
-These instructions will install the latest release of DIRACOS in a folder named `diracos`. To install a specific version replace `/latest/download/` in the URL with a version like `/download/2.0a4/`.
+These instructions will install the latest release of DIRACOS in a folder named `diracos`. To install a specific version replace `/latest/download/` in the URL with a version like `/download/2.0/`.
 
 ```bash
 curl -LO https://github.com/DIRACGrid/DIRACOS2/releases/latest/download/DIRACOS-Linux-x86_64.sh
@@ -24,8 +24,7 @@ bash DIRACOS-Linux-x86_64.sh
 ```
 
 It can then be activated in a similar way to version 1 of DIRACOS, by calling ` source "$PWD/diracos/diracosrc"`.
-
-**NOTE:** At this time there are no stable releases of DIRACOS2 and therefore the `/latest/` alias is non-functional. See the [GitHub releases page](https://github.com/DIRACGrid/DIRACOS2/releases) for the list of available pre-releases.
+Further usage instructions are shown after installation.
 
 ## Advanced documentation
 
