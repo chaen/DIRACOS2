@@ -12,7 +12,15 @@
     echo ''
     echo '# Davix options (will be default in the future)'
     echo 'export DAVIX_USE_LIBCURL=1'
+    echo ''
+    echo '# Set up the X509 variables'
+    echo "export X509_CERT_DIR=\${X509_CERT_DIR-'$PREFIX/etc/grid-security/certificates'}"
+    echo "export X509_VOMS_DIR=\${X509_VOMS_DIR-'$PREFIX/etc/grid-security/vomsdir'}"
+    echo "export X509_VOMSES=\${X509_VOMSES-'$PREFIX/etc/grid-security/vomses'}"
 } > "$PREFIX/diracosrc"
+
+# Workaround for the incorrect etc directory in v7r2
+ln -s "$PREFIX/etc" "$PREFIX/lib/python3.8/site-packages/etc"
 
 # Print further install instructions
 echo ""
