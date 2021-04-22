@@ -131,3 +131,36 @@ jobs:
           name: installer-linux-64
       - name: Run tests
         run: scripts/run_basic_tests.sh ${{ matrix.docker-image }} DIRACOS-*.sh
+
+  integration-tests:
+    name: Integration tests
+    if: github.repository == 'DIRACGrid/DIRACOS2'
+    needs: build-installer
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        dirac-branch:
+          - rel-v7r2
+          - integration
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      - name: Download installer
+        uses: actions/download-artifact@v2
+        with:
+          name: installer-linux-64
+      - name: Prepare environment
+        run: |
+          pip install typer pyyaml gitpython packaging
+          git clone https://github.com/DIRACGrid/DIRAC.git -b "${{ matrix.dirac-branch }}" DIRACRepo
+      - name: Run tests
+        run: |
+          CLIENT_DIRACOS_TARBALL_PATH=$(echo ${PWD}/DIRACOS-*.sh)
+          echo "CLIENT_DIRACOS_TARBALL_PATH is ${CLIENT_DIRACOS_TARBALL_PATH}"
+          cd DIRACRepo
+          ./integration_tests.py create \
+            "CLIENT_DIRACOS_TARBALL_PATH=${CLIENT_DIRACOS_TARBALL_PATH}" \
+            "CLIENT_USE_PYTHON3=Yes"
