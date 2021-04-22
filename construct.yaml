@@ -28,7 +28,7 @@ ignore_duplicate_files: true
 
 specs:
   - conda
-  - python 3.8.*
+  - python 3.9.*
   - pip
   # Security
   - certifi
