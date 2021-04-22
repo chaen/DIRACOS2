@@ -14,6 +14,3 @@ dependencies:
   - uritemplate
   - python-dateutil
   - pytz
-  - pip:
-    # See https://github.com/conda/constructor/pull/440
-    - git+https://github.com/chrisburr/constructor.git@add-batch_mode
