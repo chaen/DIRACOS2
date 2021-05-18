@@ -133,7 +133,7 @@ jobs:
         run: scripts/run_basic_tests.sh ${{ matrix.docker-image }} DIRACOS-*.sh
 
   integration-tests-client-only:
-    name: Integration tests
+    name: Integration tests (Py2 server)
     if: github.repository == 'DIRACGrid/DIRACOS2'
     needs: build-installer
     runs-on: ubuntu-latest
@@ -166,7 +166,7 @@ jobs:
             "CLIENT_USE_PYTHON3=Yes"
 
   integration-tests-client-and-server:
-    name: Integration tests
+    name: Integration tests (Py3 server)
     if: github.repository == 'DIRACGrid/DIRACOS2'
     needs: build-installer
     runs-on: ubuntu-latest
