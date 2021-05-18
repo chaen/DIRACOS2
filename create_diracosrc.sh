@@ -4,8 +4,10 @@
 {
     echo "export DIRACOS=$PREFIX"
     echo ''
-    echo '# Initialise the conda environment'
+    echo '# Initialise the conda environment in a way which ignores other conda installations'
+    echo 'unset CONDA_SHLVL'
     echo 'eval "$(${DIRACOS}/bin/conda shell.bash hook)"'
+    echo 'conda activate "$DIRACOS"'
     echo ''
     echo '# Silence python warnings'
     echo 'export PYTHONWARNINGS=ignore'
