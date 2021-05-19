@@ -120,7 +120,6 @@ jobs:
       fail-fast: false
       matrix:
         docker-image:
-          - "centos:6"
           - "centos:7"
           - "centos:8"
     steps:

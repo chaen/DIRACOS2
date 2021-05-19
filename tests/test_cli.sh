@@ -57,4 +57,26 @@ if ! (singularity --verbose --debug run -u lolcow || (singularity --verbose --de
   rc=1;
 fi
 
+# For HTCondor
+if ! condor_submit -help; then
+  echo "condor_submit -help not working";
+  rc=1;
+fi
+if ! condor_history -help; then
+  echo "condor_history -help not working";
+  rc=1;
+fi
+if ! condor_q -help; then
+  echo "condor_q -help not working";
+  rc=1;
+fi
+if ! condor_rm -help; then
+  echo "condor_rm -help not working";
+  rc=1;
+fi
+if ! condor_transfer_data -help; then
+  echo "condor_transfer_data -help not working";
+  rc=1;
+fi
+
 exit $rc
