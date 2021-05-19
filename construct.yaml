@@ -26,8 +26,10 @@ specs:
   # Middleware
   - boto3
   - gfal2-util
+  - htcondor-utils  # [linux64]
   - nordugrid-arc
   - python-gfal2
+  - python-htcondor  # [linux64]
   - voms
   # Others
   - diraccfg
