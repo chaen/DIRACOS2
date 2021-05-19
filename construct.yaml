@@ -1,7 +1,7 @@
 # For details about the available options see
 # https://github.com/conda/constructor/blob/master/CONSTRUCT.md
 name: DIRACOS
-version: 2.4a1
+version: 2.5a1
 
 channels:
   - diracgrid
