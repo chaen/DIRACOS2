@@ -53,6 +53,7 @@ specs:
   - python-gfal2
   - voms
   # Others
+  - cachetools
   - diraccfg
   - future
   - git
