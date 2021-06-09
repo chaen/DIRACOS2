@@ -55,6 +55,7 @@ specs:
   - python-htcondor  # [linux64]
   - voms
   # Others
+  - cachetools
   - diraccfg
   - future
   - git
@@ -71,7 +72,7 @@ specs:
   - pytz >=2015.7
   - requests >=2.9.1
   - rrdtool
-  - singularity
+  - singularity >=3.7
   - six
   - subprocess32
   - suds-jurko >=0.6
@@ -88,4 +89,4 @@ specs:
   # Probably not needed
   - lz4
   - python-xxhash
-  - xrootd
+  - xrootd >=5
