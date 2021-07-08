@@ -32,7 +32,8 @@ specs:
   - pip
   # Security
   - certifi
-  - m2crypto >=0.36
+  # M2crypto is buggy from 0.38 https://gitlab.com/m2crypto/m2crypto/-/issues/298
+  - m2crypto >=0.36,<0.38
   - pyasn1 >0.4.1
   - pyasn1-modules
   - tornado_m2crypto
