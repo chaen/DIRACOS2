@@ -16,9 +16,42 @@
     echo 'export DAVIX_USE_LIBCURL=1'
     echo ''
     echo '# Set up the X509 variables'
-    echo "export X509_CERT_DIR=\${X509_CERT_DIR-'$PREFIX/etc/grid-security/certificates'}"
-    echo "export X509_VOMS_DIR=\${X509_VOMS_DIR-'$PREFIX/etc/grid-security/vomsdir'}"
-    echo "export X509_VOMSES=\${X509_VOMSES-'$PREFIX/etc/grid-security/vomses'}"
+    echo ''
+    echo '# Function check if folder exist and contins files'
+    echo 'function checkDir () {'
+    echo '  if [ -z "${1}" ]; then'
+    echo '    return 1'
+    echo '  fi'
+    echo '  if [ -n "$(ls -A "${1}" 2>/dev/null)" ]; then'
+    echo '    return 0'
+    echo '  fi'
+    echo '  return 1'
+    echo '}'
+    echo ''
+    echo '# Add sanity check for X509_CERT_DIR variable'
+    echo 'if ! checkDir "$X509_CERT_DIR" ; then'
+    echo '  export X509_CERT_DIR="/etc/grid-security/certificates"'
+    echo '  if ! checkDir "$X509_CERT_DIR" ; then'
+    echo "    export X509_CERT_DIR='${PREFIX}/etc/grid-security/certificates'"
+    echo '  fi'
+    echo 'fi'
+    echo ''
+    echo '# Add sanity check for X509_VOMS_DIR variable'
+    echo 'if ! checkDir "$X509_VOMS_DIR" ; then'
+    echo '  export X509_VOMS_DIR="/etc/grid-security/vomsdir"'
+    echo '  if ! checkDir "$X509_VOMS_DIR" ; then'
+    echo "    export X509_VOMS_DIR='${PREFIX}/etc/grid-security/vomsdir'"
+    echo '  fi'
+    echo 'fi'
+    echo ''
+    echo '# Add sanity check for X509_VOMSES variable'
+    echo 'if ! checkDir "$X509_VOMSES" ; then'
+    echo '  export X509_VOMSES="/etc/vomses"'
+    echo '  if ! checkDir "$X509_VOMSES" ; then'
+    echo "    export X509_VOMSES='${PREFIX}/etc/grid-security/vomses'"
+    echo '  fi'
+    echo 'fi'
+    echo ''
 } > "$PREFIX/diracosrc"
 
 # Workaround for the incorrect etc directory in v7r2
